@@ -29,9 +29,24 @@ class VATStatusValidator {
     }
 
     let currentDate = new Date().toISOString().slice(0, 10);
-    fetch('https://wl-api.mf.gov.pl/api/search/nip/' + this.nip + '?date=' + currentDate)
+    fetch('https://wl-api.mf.gov.pl/api/search/nip/' + this.nip + '?date=' + currentDate, {cache: "default"})
     .then(response => response.json())
     .then(data => handleResponse(data));
-  }
+  };
 
+  validateCompany(){
+    let self = this;
+
+    function handleResponse(data){
+      if(data.result){
+        return (data.result.subject && data.result.subject.statusVat == 'Czynny' ? true : false);
+      }
+      return false;
+    }
+
+    let currentDate = new Date().toISOString().slice(0, 10);
+    return fetch('https://wl-api.mf.gov.pl/api/search/nip/' + this.nip + '?date=' + currentDate)
+    .then(response => response.json())
+    .then(data => handleResponse(data));
+  };
 }
