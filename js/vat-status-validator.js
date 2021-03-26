@@ -16,6 +16,7 @@ class VATStatusValidator {
       let imageElement = document.createElement("img");
       imageElement.src = "https://img.shields.io/badge/VAT status-" + status + "-white?labelColor=" + statusColor + "&style=flat";
       imageElement.alt = "VAT status: " + status;
+      imageElement.title = "Status VAT podatnika o numerze NIP: " + self.nip + ": " + status;
       imageElement.classList.add( "vat-status-" + statusColor);
       let sourceElement = document.getElementById(self.elementId);
       sourceElement.appendChild(imageElement);
