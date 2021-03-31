@@ -26,11 +26,13 @@ class VATStatusValidator {
       if(data.result){
         let verifiedStatus = (data.result.subject && data.result.subject.statusVat == 'Czynny' ? true : false);
         addImageWithVATStatusBadge(verifiedStatus);
+        return verifiedStatus;
       }
+      return false;
     }
 
     let currentDate = new Date().toISOString().slice(0, 10);
-    fetch('https://wl-api.mf.gov.pl/api/search/nip/' + this.nip + '?date=' + currentDate, {cache: "default"})
+    return fetch('https://wl-api.mf.gov.pl/api/search/nip/' + this.nip + '?date=' + currentDate, {cache: "default"})
     .then(response => response.json())
     .then(data => handleResponse(data));
   };
