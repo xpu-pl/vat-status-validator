@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Test Suite</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.14.1.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <div id="vat-status-badge"></div>
+  <script src="https://code.jquery.com/qunit/qunit-2.14.1.js"></script>
+
+  <!--
+  <script src="https://cdn.jsdelivr.net/gh/xpu-pl/vat-status-validator/js/vat-status-validator.js"></script>
+-->
+  <script src="../js/vat-status-validator.js"></script>
+
+  <script>
+
+    QUnit.test( "validateCompany returns true for a valid VAT company", function( assert ) {
+      var done = assert.async();
+
+      new VATStatusValidator("7792488801").validateCompany()
+      .then(function(result) {
+        // check the result for the hardcoded, valid VAT company
+        assert.equal(result, true)
+
+        // Now tell QUnit you're all done with the test
+        done();
+      })
+      // we can pass the "done" callback from above into catch() to force a test failure
+      .catch(done);
+    });
+
+    QUnit.test( "addBadge returns true for a valid VAT company and adds proper element to vat-status-badge element", function( assert ) {
+      var done = assert.async();
+
+      new VATStatusValidator("7792488801").addBadge()
+      .then(function(result) {
+        // check the result for the hardcoded, valid VAT company
+        assert.equal(result, true);
+        // check the inserted element properties (hardcoded Polish locales)
+        let addedElementWithBadge = document.getElementById("vat-status-badge").firstChild;
+        assert.equal( "https://img.shields.io/badge/VAT%20status-ZWERYFIKOWANY-white?labelColor=green&style=flat", addedElementWithBadge.src, "check src value" );
+        assert.equal( "VAT status: ZWERYFIKOWANY", addedElementWithBadge.alt, "check alt value" );
+        assert.equal( "Status VAT podatnika o numerze NIP: 7792488801: ZWERYFIKOWANY", addedElementWithBadge.title, "check title value" );
+        assert.equal( true, addedElementWithBadge.classList.contains('vat-status-green'), "check classList value" );
+
+        // Now tell QUnit you're all done with the test
+        done();
+      })
+      // we can pass the "done" callback from above into catch() to force a test failure
+      .catch(done);
+
+    });
+  </script>
+
+
+</body>
+</html>
